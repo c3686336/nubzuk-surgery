@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://dm6uovq56npft"]
+
+[ext_resource type="Script" uid="uid://ddnh36nnpnwl5" path="res://fragment.gd" id="1_0bg5d"]
+[ext_resource type="ArrayMesh" uid="uid://eq31rxp4aw3g" path="res://nubzuki_left_success.obj" id="1_ovjkv"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_ovjkv"]
+points = PackedVector3Array(0.0298519, 0.938266, 0.876334, -0.172716, -3.27952, -0.480694, 0.029414, -3.2894, -0.484835, -0.450179, 0.663053, -1.52543, 0.77456, 0.0296429, -1.63549, 0.600249, -0.335996, 2.1739, -0.832719, 0.00358374, 1.45682, -0.537471, -0.620406, -1.88006, 0.244699, -3.25131, 0.538142, 0.95751, 0.136911, 0.594625, -0.174806, 0.039162, 2.58092, -0.25299, -3.32252, 0.538142, -0.969747, 0.00874027, -0.60266, 0.74326, -1.77417, 0.00627604, 0.503902, 0.775887, -0.959007, 0.528977, -0.620406, -1.88006, -0.644504, 0.697596, 0.800141, -0.748767, -1.70714, 0.00814286, 0.436022, 0.572102, 1.81888, 0.315768, -3.1801, -0.385561, -0.466401, -1.33122, -1.66663, -0.466401, -1.33122, 1.67617, -0.242338, 0.580481, 2.02995, 0.386838, -0.407206, 2.38733, 0.704742, 0.701165, 0.19338, 0.963233, 0.144802, -0.537827, -0.243425, 0.930508, -0.698271, -0.778755, 0.0228069, -1.62477, -0.841476, 0.48535, -0.541293, 0.235352, 0.795438, -1.45195, -0.963842, 0.00141402, 0.660515, -0.571426, 0.078649, 2.13162)
+
+[node name="RigidBody3D" type="RigidBody3D" groups=["Trash"]]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+mass = 0.33
+script = ExtResource("1_0bg5d")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("1_ovjkv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_ovjkv")

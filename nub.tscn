@@ -1,0 +1,53 @@
+[gd_scene load_steps=11 format=3 uid="uid://vxjt1xk5u4k4"]
+
+[ext_resource type="Script" uid="uid://bosjnh1hcjbd2" path="res://nub.gd" id="1_c271t"]
+[ext_resource type="Script" uid="uid://cgll1w843205s" path="res://nub_collision.gd" id="2_djsa8"]
+[ext_resource type="ArrayMesh" uid="uid://ctek37lae7hu3" path="res://nubzuki.obj" id="2_kr5k0"]
+[ext_resource type="Script" uid="uid://hv076pbtglt8" path="res://skull.gd" id="3_k1g5d"]
+[ext_resource type="Script" uid="uid://bnvpdruy5078n" path="res://head.gd" id="3_rydyl"]
+[ext_resource type="Texture2D" uid="uid://b7j7twr4mktj7" path="res://Texture.png" id="5_pmye2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rydyl"]
+size = Vector3(1.35, 1, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c271t"]
+size = Vector3(5.325, 1.975, 2.17)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rydyl"]
+albedo_texture = ExtResource("5_pmye2")
+roughness = 0.73
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_kr5k0"]
+points = PackedVector3Array(0.124106, 0.859311, 1.28116, -0.192224, -3.26767, -0.471758, 0.204279, 0.058582, -2.56271, -0.960534, 0.168357, -0.540171, 0.967807, 0.0119276, 0.616592, -0.539626, -0.38738, 2.2594, 0.297071, -3.23284, 0.501797, 0.297071, -0.38738, 2.51056, 0.817421, 0.095225, -1.47104, -0.539626, -0.38738, -2.2594, -0.372082, -3.23284, 0.418426, -0.115567, 0.779581, -1.60157, 0.297071, -3.23284, -0.501797, -0.888543, 0.176376, 1.08676, 0.59572, 0.749572, -0.709484, -0.354418, 0.931498, 0.0794589, 0.297071, -0.38738, -2.51056, -0.706549, -1.89293, -0.149555, -0.273475, 0.445077, 2.22297, 0.670225, 0.188899, 1.88081, 0.71351, -1.89131, -0.0743736, -0.582921, 0.423078, -1.80135, 0.772932, -0.340812, 1.39054, 0.820857, 0.48958, 0.69965, -0.0374027, -0.471185, 2.51056, -0.372082, -3.23284, -0.418426, -0.945265, -0.156898, 0.683447, -0.0374027, -0.471185, -2.51056, 0.967816, 0.0119395, -0.616599, -0.663288, 0.663401, 0.863721, -0.794216, -0.155576, -1.52115, 0.284087, 0.53715, -2.07949)
+
+[node name="Nub" type="RigidBody3D" groups=["Trash"]]
+process_mode = 1
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+script = ExtResource("1_c271t")
+
+[node name="Skull" type="Area3D" parent="." groups=["Nub_skull", "Sliceable"]]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+script = ExtResource("3_k1g5d")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Skull"]
+shape = SubResource("BoxShape3D_rydyl")
+
+[node name="Head" type="Area3D" parent="." groups=["Nub", "Sliceable"]]
+script = ExtResource("3_rydyl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head"]
+shape = SubResource("BoxShape3D_c271t")
+script = ExtResource("2_djsa8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("2_kr5k0")
+surface_material_override/0 = SubResource("StandardMaterial3D_rydyl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+visible = false
+shape = SubResource("ConvexPolygonShape3D_kr5k0")

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://42fwfwp48pik"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_yx7mw"]
+size = Vector3(0.3, 3, 1)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_ut3sq"]
+points = PackedVector3Array(0.15, 1.5, 0.5, -0.15, 1.5, 0.5, 0.15, -1.5, 0.5, 0.15, 1.5, -0.5, -0.15, 1.5, -0.5, -0.15, -1.5, 0.5, 0.15, -1.5, -0.5, -0.15, -1.5, -0.5)
+
+[node name="Paddle" type="RigidBody3D"]
+process_mode = 1
+axis_lock_linear_x = true
+axis_lock_linear_y = true
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_yx7mw")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ConvexPolygonShape3D_ut3sq")

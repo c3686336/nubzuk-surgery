@@ -1,0 +1,116 @@
+[gd_scene load_steps=9 format=3 uid="uid://dy3548uk5lggj"]
+
+[ext_resource type="Script" uid="uid://coqxeqtms642e" path="res://main_game.gd" id="1_1oj5k"]
+[ext_resource type="Texture2D" uid="uid://ds1xv5cghyeqo" path="res://KAIST_Logo/kaist_logo_trans.png" id="2_6bm6p"]
+[ext_resource type="Script" uid="uid://b3gisq6wio553" path="res://score.gd" id="2_yx7mw"]
+[ext_resource type="PackedScene" uid="uid://42fwfwp48pik" path="res://paddle.tscn" id="3_ykeeq"]
+[ext_resource type="Script" uid="uid://x2upq24r0wls" path="res://pause_menu.gd" id="5_2pltu"]
+
+[sub_resource type="SystemFont" id="SystemFont_1oj5k"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_yx7mw"]
+font = SubResource("SystemFont_1oj5k")
+font_size = 50
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Environment" id="Environment_6bm6p"]
+
+[node name="Game" type="Node3D"]
+process_mode = 1
+script = ExtResource("1_1oj5k")
+
+[node name="StartMenuContainer" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -156.5
+offset_top = -77.5
+offset_right = 156.5
+offset_bottom = 77.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StartGameButton" type="Button" parent="StartMenuContainer"]
+layout_mode = 2
+text = "Start Game"
+
+[node name="OptionButton" type="Button" parent="StartMenuContainer"]
+layout_mode = 2
+text = "Option"
+
+[node name="TextureRect" type="TextureRect" parent="StartMenuContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("2_6bm6p")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+size = 30.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.622515, 0.514467, -0.589745, 0, 0.753563, 0.657375, 0.782608, -0.409226, 0.469104, 0, 0, 0)
+light_energy = 2.665
+
+[node name="Score" type="Label" parent="."]
+visible = false
+offset_left = 61.0
+offset_top = 51.0
+offset_right = 104.0
+offset_bottom = 74.0
+text = "Score"
+label_settings = SubResource("LabelSettings_yx7mw")
+script = ExtResource("2_yx7mw")
+
+[node name="Paddle" parent="." instance=ExtResource("3_ykeeq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -4, 0)
+
+[node name="Paddle2" parent="." instance=ExtResource("3_ykeeq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -4, 0)
+constant_torque = Vector3(0, 0, 50)
+
+[node name="Paddle3" parent="." instance=ExtResource("3_ykeeq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 4, 0)
+constant_torque = Vector3(0, 0, -20)
+
+[node name="Paddle4" parent="." instance=ExtResource("3_ykeeq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 4, 0)
+constant_torque = Vector3(0, 0, 30)
+
+[node name="PauseMenuContainer" type="VBoxContainer" parent="."]
+process_mode = 2
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -81.0
+offset_top = -50.5
+offset_right = 81.0
+offset_bottom = 50.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_2pltu")
+
+[node name="ResumeGameButton" type="Button" parent="PauseMenuContainer"]
+layout_mode = 2
+text = "Unpause"
+
+[node name="NewGameButton" type="Button" parent="PauseMenuContainer"]
+layout_mode = 2
+text = "New Game"
+
+[node name="OptionButton" type="Button" parent="PauseMenuContainer"]
+layout_mode = 2
+text = "Option"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6bm6p")
+
+[connection signal="pressed" from="StartMenuContainer/StartGameButton" to="." method="_on_start_game"]
+[connection signal="unpause" from="PauseMenuContainer" to="." method="_on_unpause_game"]
+[connection signal="pressed" from="PauseMenuContainer/ResumeGameButton" to="." method="_on_unpause_game"]
+[connection signal="pressed" from="PauseMenuContainer/NewGameButton" to="." method="_on_new_game"]
