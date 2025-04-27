@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dg22xsykdmsfo"]
+
+[ext_resource type="AudioStream" uid="uid://ubgj2ny3ktlq" path="res://vb.ogg" id="1_crcy4"]
+[ext_resource type="Script" uid="uid://b0crqcr4wjyda" path="res://boom.gd" id="2_37ygf"]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer"]
+stream = ExtResource("1_crcy4")
+script = ExtResource("2_37ygf")
+
+[connection signal="finished" from="." to="." method="_on_finished"]
