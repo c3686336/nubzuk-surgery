@@ -2,15 +2,14 @@ extends Node3D
 
 @onready var nub_scene = preload("res://nub.tscn")
 
-signal kys_now
-
 var timer
 var timer_thres
 var timer_paused_at
 
-var timer_thres_default = 30
+var timer_thres_default = 1000
 var timer_thres_mean = timer_thres_default
 var timer_thres_std = 30
+var timer_thres_demo = 100
 
 var score = 0
 
@@ -38,9 +37,20 @@ func _on_start_game() -> void:
 	$Score.show()
 
 func _on_unpause_game() -> void:
+	if demo_mode:
+		return
+	
 	resume_timer()
 	get_tree().paused = false
 	$PauseMenuContainer.hide()
+
+func _on_pause_game() -> void:
+	if demo_mode:
+		return
+
+	pause_timer()
+	$PauseMenuContainer.show()
+	get_tree().paused = true
 
 func _on_new_game() -> void:
 	initialize()
@@ -48,6 +58,7 @@ func _on_new_game() -> void:
 func initialize() -> void:
 	get_tree().paused = false
 	reset_timer()
+	timer_thres = timer_thres_demo
 	demo_mode = true
 	score = 0
 	$Score.set_score(0)
@@ -67,7 +78,10 @@ func _process(delta: float):
 		var nub = nub_scene.instantiate()
 		timer = Time.get_ticks_msec()
 		var rand = randfn(timer_thres_mean, timer_thres_std)
-		timer_thres = max(min(60, rand), 3)
+		if demo_mode:
+			timer_thres = timer_thres_demo
+		else:
+			timer_thres = max(min(2000, rand), 3)
 
 		nub.position = Vector3(-30, randfn(0, 5), randfn(0, 4))
 		nub.linear_velocity = Vector3(randfn(25, 3), abs(randfn(0, 7)), 0)
@@ -81,10 +95,7 @@ func _process(delta: float):
 		add_child(nub)
 
 func _input(event):
-	if Input.is_action_just_pressed("ui_cancel") && !demo_mode:
-		pause_timer()
-		$PauseMenuContainer.show()
-		get_tree().paused = true
+	pass
 
 func _physics_process(delta: float) -> void:
 	var space_state = get_world_3d().direct_space_state
@@ -119,10 +130,10 @@ func _update_score(ds: int):
 		$Score.set_score(score)
 		
 func _on_success():
-	_update_score(+100)
+	_update_score(+15)
 
 func _on_fail():
-	_update_score(-1)
+	_update_score(-5)
 
 func _on_dead():
-	_update_score(-max(30, score)/3)
+	_update_score(-13)
