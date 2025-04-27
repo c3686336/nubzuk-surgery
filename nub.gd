@@ -4,6 +4,8 @@ signal success
 signal fail
 signal dead
 
+@onready var globals = $"/root/Globals"
+
 @onready var frag1_scene = preload("res://nub_fragment_1.tscn")
 @onready var frag2_scene = preload("res://nub_fragment_2.tscn")
 @onready var frag3_scene = preload("res://nub_fragment_3.tscn")
@@ -19,7 +21,7 @@ func _ready():
 	randomize()
 
 func _process(delta: float):
-	if position.y < -20.0:
+	if position.dot(position) > globals.max_pos_sq:
 		fail.emit()
 		queue_free()
 
