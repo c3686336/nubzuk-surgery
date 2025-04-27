@@ -6,18 +6,42 @@ var timer
 var timer_thres
 var timer_paused_at
 
-var timer_thres_default = 1000
-var timer_thres_mean = timer_thres_default
-var timer_thres_std = 30
-var timer_thres_demo = 100
+var timer_thres_mean
 
-var score = 0
+const timer_thres_default = 30
 
-var demo_mode = true 
+const timer_thres_std = 30
+const timer_thres_min = 50
+const timer_thres_max = 2000
+const timer_thres_demo = 100
+
+const timer_score_influence = 1.0/30.0
+
+const success_score = 70
+const fail_score = 1
+const dead_score = 30
+
+const nub_position_x = -30
+const nub_position_y_std = 5
+const nub_position_z_std = 4
+const nub_position_z_min = -10
+const nub_position_z_max = 15
+const nub_vel_x_mean = 10
+const nub_vel_x_std = 3
+const nub_vel_y_std = 7
+const nub_avel_mean = 5
+const nub_avel_std = 10
+
+var score
+
+var demo_mode
+
+func clampv(minimum, maximum, v):
+	return min(maximum, max(minimum, v))
 
 func reset_timer() -> void:
 	timer = Time.get_ticks_msec()
-	timer_thres = randfn(timer_thres_mean, timer_thres_std)
+	timer_thres = clampi(randfn(timer_thres_mean, timer_thres_std), timer_thres_min, timer_thres_max)
 
 func pause_timer() -> void:
 	timer_paused_at = Time.get_ticks_msec()
@@ -28,6 +52,7 @@ func resume_timer() -> void:
 func _on_start_game() -> void:
 	initialize()
 	
+	timer_thres_mean = timer_thres_default
 	reset_timer()
 
 	demo_mode = false
@@ -57,11 +82,12 @@ func _on_new_game() -> void:
 
 func initialize() -> void:
 	get_tree().paused = false
+	timer_thres_mean = timer_thres_demo
 	reset_timer()
-	timer_thres = timer_thres_demo
 	demo_mode = true
 	score = 0
 	$Score.set_score(0)
+	$Score.hide()
 	$StartMenuContainer.show()
 	$PauseMenuContainer.hide()
 
@@ -76,17 +102,17 @@ func _ready() -> void:
 func _process(delta: float):
 	if Time.get_ticks_msec() - timer > timer_thres:
 		var nub = nub_scene.instantiate()
-		timer = Time.get_ticks_msec()
-		var rand = randfn(timer_thres_mean, timer_thres_std)
+		reset_timer()
 		if demo_mode:
 			timer_thres = timer_thres_demo
-		else:
-			timer_thres = max(min(2000, rand), 3)
 
-		nub.position = Vector3(-30, randfn(0, 5), randfn(0, 4))
-		nub.linear_velocity = Vector3(randfn(25, 3), abs(randfn(0, 7)), 0)
+		nub.position = Vector3(
+			nub_position_x,
+			randfn(0, nub_position_y_std),
+			clampf(randfn(0, nub_position_z_std), nub_position_z_min, nub_position_z_max))
+		nub.linear_velocity = Vector3(randfn(nub_vel_x_mean, nub_vel_x_std), abs(randfn(0, nub_vel_y_std)), 0)
 
-		nub.angular_velocity.z = randfn(5, 10)
+		nub.angular_velocity.z = randfn(nub_avel_mean, nub_avel_std)
 
 		nub.success.connect(_on_success)
 		nub.fail.connect(_on_fail)
@@ -126,14 +152,14 @@ func _physics_process(delta: float) -> void:
 func _update_score(ds: int):
 	if !demo_mode:
 		score += ds
-		timer_thres_mean = timer_thres_default - score/10.0
+		timer_thres_mean = timer_thres_default - score*timer_score_influence
 		$Score.set_score(score)
 		
 func _on_success():
-	_update_score(+15)
+	_update_score(+success_score)
 
 func _on_fail():
-	_update_score(-5)
+	_update_score(-fail_score)
 
 func _on_dead():
-	_update_score(-13)
+	_update_score(-dead_score)

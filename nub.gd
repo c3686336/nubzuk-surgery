@@ -21,8 +21,22 @@ func _process(delta: float):
 		fail.emit()
 		queue_free()
 
-func get_random_vector():
-	return Vector3(abs(randfn(0, 3)), randfn(0, 3), 0.0)
+func get_random_vector_of_direction(direction):
+	return direction*abs(randfn(1, 3))
+
+func set_fragments_movement(relmas1, relmas2, frag1, frag2):
+	var relvel = to_global(get_random_vector_of_direction(Vector3(1.0, 0.0, 0.0)))
+	
+	frag1.linear_velocity = self.linear_velocity - relvel*(relmas1+relmas2)/relmas1
+	frag2.linear_velocity = self.linear_velocity + relvel*(relmas1+relmas2)/relmas2
+
+	frag1.angular_velocity = self.angular_velocity*(relmas1+relmas2)/relmas1
+	frag2.angular_velocity = self.angular_velocity*(relmas1+relmas2)/relmas2
+
+	frag1.position = position
+	frag1.rotation = rotation
+	frag2.position = position
+	frag2.rotation = rotation
 
 func _on_success():
 	success.emit()
@@ -30,13 +44,7 @@ func _on_success():
 	var frag1 = frag1_scene.instantiate()
 	var frag2 = frag2_scene.instantiate()
 
-	frag1.linear_velocity = self.linear_velocity - get_random_vector()*1
-	frag2.linear_velocity = self.linear_velocity + get_random_vector()*2
-
-	frag1.position = position
-	frag1.rotation = rotation
-	frag2.position = position
-	frag2.rotation = rotation
+	set_fragments_movement(2, 1, frag1, frag2)
 	
 	self.get_parent().add_child(frag1)
 	self.get_parent().add_child(frag2)
@@ -49,13 +57,7 @@ func _on_fail():
 	var body1 = body1_scene.instantiate()
 	var body2 = body2_scene.instantiate()
 
-	body1.linear_velocity = self.linear_velocity - get_random_vector()
-	body2.linear_velocity = self.linear_velocity + get_random_vector()
-
-	body1.position = position
-	body1.rotation = rotation
-	body2.position = position
-	body2.rotation = rotation
+	set_fragments_movement(1, 1, body1, body2)
 
 	self.get_parent().add_child(body1)
 	self.get_parent().add_child(body2)
