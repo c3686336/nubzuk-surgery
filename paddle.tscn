@@ -7,7 +7,7 @@ size = Vector3(0.3, 3, 1)
 points = PackedVector3Array(0.15, 1.5, 0.5, -0.15, 1.5, 0.5, 0.15, -1.5, 0.5, 0.15, 1.5, -0.5, -0.15, 1.5, -0.5, -0.15, -1.5, 0.5, 0.15, -1.5, -0.5, -0.15, -1.5, -0.5)
 
 [node name="Paddle" type="RigidBody3D"]
-process_mode = 1
+process_mode = 4
 axis_lock_linear_x = true
 axis_lock_linear_y = true
 axis_lock_linear_z = true

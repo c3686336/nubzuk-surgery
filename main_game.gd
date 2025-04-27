@@ -143,9 +143,10 @@ func _physics_process(delta: float) -> void:
 			Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 		
 		if Input.is_action_just_pressed("click") && !demo_mode && result:
+			print(result)
 			var poor_nub = result["collider"]
 			if poor_nub.is_in_group("Sliceable"):
-				poor_nub.on_slice()
+				poor_nub.on_slice(result["position"])
 	else:
 		Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 

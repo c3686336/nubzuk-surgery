@@ -6,6 +6,8 @@ signal dead
 
 @onready var frag1_scene = preload("res://nub_fragment_1.tscn")
 @onready var frag2_scene = preload("res://nub_fragment_2.tscn")
+@onready var frag3_scene = preload("res://nub_fragment_3.tscn")
+@onready var frag4_scene = preload("res://nub_fragment_4.tscn")
 
 @onready var body1_scene = preload("res://nub_deadbody_1.tscn")
 @onready var body2_scene = preload("res://nub_deadbody_2.tscn")
@@ -38,26 +40,34 @@ func set_fragments_movement(relmas1, relmas2, frag1, frag2):
 	frag2.position = position
 	frag2.rotation = rotation
 
-func _on_success():
+func _on_success(clickpos: Vector3):
+	var frag1
+	var frag2
+	
+	if to_local(clickpos).x > 0.0:
+		frag1 = frag1_scene.instantiate()
+		frag2 = frag2_scene.instantiate()
+	else:
+		frag1 = frag3_scene.instantiate()
+		frag2 = frag4_scene.instantiate()
+	
 	success.emit()
 	
-	var frag1 = frag1_scene.instantiate()
-	var frag2 = frag2_scene.instantiate()
 
-	set_fragments_movement(2, 1, frag1, frag2)
+	set_fragments_movement(frag1.mass, frag2.mass, frag1, frag2)
 	
 	self.get_parent().add_child(frag1)
 	self.get_parent().add_child(frag2)
 
 	queue_free()
 
-func _on_fail():
+func _on_fail(clickpos: Vector3):
 	dead.emit()
 
 	var body1 = body1_scene.instantiate()
 	var body2 = body2_scene.instantiate()
 
-	set_fragments_movement(1, 1, body1, body2)
+	set_fragments_movement(body1.mass, body2.mass, body1, body2)
 
 	self.get_parent().add_child(body1)
 	self.get_parent().add_child(body2)

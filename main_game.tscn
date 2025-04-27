@@ -41,7 +41,7 @@ layout_mode = 2
 text = "Option"
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00288355, -0.0217943, 15.012)
 size = 30.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]

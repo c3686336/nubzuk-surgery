@@ -30,6 +30,10 @@ click={
 ]
 }
 
+[physics]
+
+3d/default_gravity=5.0
+
 [rendering]
 
 renderer/rendering_method="mobile"
